@@ -31,6 +31,7 @@ export class PreguntasComponent implements OnInit {
   ];
 
   preguntasAleatorias: Pregunta[] = [];
+  preguntasSeleccionadas: Pregunta[] = [];
   preguntaActual = 0;
   respuestaSeleccionada: string | null = null;
   mostrarRespuestaIncorrecta = false;
@@ -39,13 +40,14 @@ export class PreguntasComponent implements OnInit {
 
   ngOnInit() {
     this.preguntasAleatorias = this.obtenerPreguntasAleatorias();
+    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 2); // Mostrar solo 2 preguntas
   }
 
   obtenerPreguntasAleatorias(): Pregunta[] {
     const preguntas = [...this.preguntas];
     const preguntasAleatorias: Pregunta[] = [];
 
-    while (preguntas.length > 0) {
+    while (preguntasAleatorias.length < 3) {
       const index = Math.floor(Math.random() * preguntas.length);
       const pregunta = preguntas.splice(index, 1)[0];
       pregunta.opciones = this.obtenerOpcionesAleatorias(pregunta.opciones);
@@ -75,7 +77,7 @@ export class PreguntasComponent implements OnInit {
     this.respuestaSeleccionada = null;
     this.preguntaActual++;
 
-    if (this.preguntaActual < this.preguntasAleatorias.length) {
+    if (this.preguntaActual < this.preguntasSeleccionadas.length) {
       this.mostrarSiguiente = false;
     } else {
       this.mostrarPreguntas = false;

@@ -1,5 +1,5 @@
 <div *ngIf="mostrarPreguntas">
-    <div *ngFor="let pregunta of preguntasAleatorias; let i = index">
+    <div *ngFor="let pregunta of preguntasSeleccionadas; let i = index">
       <div *ngIf="preguntaActual === i">
         <h3>Pregunta {{ i + 1 }}</h3>
         <p>{{ pregunta.pregunta }}</p>
@@ -14,7 +14,7 @@
         <p *ngIf="!verificarRespuesta(pregunta) && respuestaSeleccionada !== null" class="aviso">Respuesta incorrecta. ¡Inténtalo de nuevo!</p>
       </div>
     </div>
-    <button (click)="siguientePregunta()" [disabled]="!verificarRespuesta(preguntasAleatorias[preguntaActual]) || respuestaSeleccionada === null">Siguiente</button>
+    <button (click)="siguientePregunta()" [disabled]="!verificarRespuesta(preguntasSeleccionadas[preguntaActual]) || respuestaSeleccionada === null">Siguiente</button>
   </div>
   
   <div *ngIf="!mostrarPreguntas">
