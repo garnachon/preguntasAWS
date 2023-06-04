@@ -1,0 +1,24 @@
+<div *ngIf="mostrarPreguntas">
+    <div *ngFor="let pregunta of preguntasAleatorias; let i = index">
+      <div *ngIf="preguntaActual === i">
+        <h3>Pregunta {{ i + 1 }}</h3>
+        <p>{{ pregunta.pregunta }}</p>
+        <ul>
+          <li *ngFor="let opcion of pregunta.opciones">
+            <label>
+              <input type="radio" name="pregunta{{ i }}" [value]="opcion" [(ngModel)]="respuestaSeleccionada">
+              {{ opcion }}
+            </label>
+          </li>
+        </ul>
+        <p *ngIf="!verificarRespuesta(pregunta) && respuestaSeleccionada !== null" class="aviso">Respuesta incorrecta. ¡Inténtalo de nuevo!</p>
+      </div>
+    </div>
+    <button (click)="siguientePregunta()" [disabled]="!verificarRespuesta(preguntasAleatorias[preguntaActual]) || respuestaSeleccionada === null">Siguiente</button>
+  </div>
+  
+  <div *ngIf="!mostrarPreguntas">
+    <h3>¡Has terminado las preguntas!</h3>
+    <p>Gracias por participar.</p>
+  </div>
+  
