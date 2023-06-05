@@ -27,6 +27,11 @@ export class PreguntasComponent implements OnInit {
       pregunta: '¿Cuál es el río más largo del mundo?',
       opciones: ['Amazonas', 'Nilo', 'Mississippi', 'Yangtsé'],
       respuesta: 'Amazonas'
+    },
+    {
+      pregunta: '¿Cuál es el pecho frio mas grande?',
+      opciones: ['Belgrano', 'Instituto', 'Talleres', 'Racing'],
+      respuesta: 'Talleres'
     }
   ];
 
@@ -37,10 +42,14 @@ export class PreguntasComponent implements OnInit {
   mostrarRespuestaIncorrecta = false;
   mostrarSiguiente = false;
   mostrarPreguntas = true;
+  preguntasCompletadas = false;
+  mostrarGracias = false;
+  mostrarPreguntaVolver = true;
+
 
   ngOnInit() {
     this.preguntasAleatorias = this.obtenerPreguntasAleatorias();
-    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 2); // Mostrar solo 2 preguntas
+    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 3); // Mostrar solo 2 preguntas
   }
 
   obtenerPreguntasAleatorias(): Pregunta[] {
@@ -81,6 +90,19 @@ export class PreguntasComponent implements OnInit {
       this.mostrarSiguiente = false;
     } else {
       this.mostrarPreguntas = false;
+      this.preguntasCompletadas = true;
     }
+  }
+
+  reiniciarPrueba() {
+    this.mostrarPreguntas = true;
+    this.preguntasCompletadas = false;
+    this.preguntaActual = 0;
+    this.respuestaSeleccionada = null;
+    this.mostrarRespuestaIncorrecta = false;
+    this.mostrarSiguiente = false;
+    this.preguntasAleatorias = this.obtenerPreguntasAleatorias();
+    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 3); // Mostrar solo 2 preguntas
+    this.mostrarGracias = false;
   }
 }

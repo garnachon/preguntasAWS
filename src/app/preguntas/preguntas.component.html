@@ -17,8 +17,15 @@
     <button (click)="siguientePregunta()" [disabled]="!verificarRespuesta(preguntasSeleccionadas[preguntaActual]) || respuestaSeleccionada === null">Siguiente</button>
   </div>
   
-  <div *ngIf="!mostrarPreguntas">
-    <h3>¡Has terminado las preguntas!</h3>
-    <p>Gracias por participar.</p>
+  <div *ngIf="!mostrarPreguntas || preguntasCompletadas">
+    <div *ngIf="!mostrarGracias">
+      <h3>¡Has terminado las preguntas!</h3>
+      <p>Gracias por participar.</p>
+      <p>¿Quieres volver a hacer el examen?</p>
+      <button (click)="reiniciarPrueba()">Sí</button>
+      <button (click)="mostrarGracias = true">No</button>
+    </div>
+    <div *ngIf="mostrarGracias" class="agradecimiento">
+      <p>Muchas gracias.</p>
+    </div>
   </div>
-  
