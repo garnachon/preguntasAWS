@@ -36,7 +36,7 @@ export class PreguntasComponent {
       opciones: ['*Talleres', ' Belgrano', ' Racing', ' Instituto']
     },
     {
-      pregunta: '¿Cuales son numeros pares (seleccionar 2 opciones)?',
+      pregunta: '¿Cuales son numeros pares?',
       opciones: ['*2', ' 5', ' 7', '*8']
     },
     {
@@ -103,13 +103,10 @@ export class PreguntasComponent {
     this.mostrarPreguntaVolver = true;
   }
 
-  volverInicio() {
-    this.mostrarGracias = false;
-    this.mostrarPreguntaVolver = true;
-  }
-
-  mostrarResultado() {
-    this.mostrarPreguntaVolver = false;
+  despedirse() {
     this.mostrarGracias = true;
+    this.mostrarPreguntaVolver = false;
+    this.mostrarPreguntas = false;
+    this.preguntasCompletadas = false;
   }
 }

@@ -19,9 +19,10 @@
 <div *ngIf="preguntasCompletadas">
   <h2>¡Has completado la prueba!</h2>
   <button (click)="reiniciarPrueba()">Volver a empezar</button>
+  <button (click)="despedirse()">Despedirse</button>
 </div>
 
 <div *ngIf="mostrarGracias">
   <h2>¡Gracias por completar la prueba!</h2>
-  <button (click)="volverInicio()">Volver al inicio</button>
+  <button *ngIf="mostrarPreguntaVolver" (click)="reiniciarPrueba()">Volver a empezar</button>
 </div>
