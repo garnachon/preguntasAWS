@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 interface Pregunta {
   pregunta: string;
   opciones: string[];
-  respuesta: string;
+  respuesta: string[];
 }
 
 @Component({
@@ -16,29 +16,29 @@ export class PreguntasComponent implements OnInit {
     {
       pregunta: '¿Cuál es la capital de Francia?',
       opciones: ['Londres', 'París', 'Madrid', 'Roma'],
-      respuesta: 'París'
+      respuesta: ['París']
     },
     {
       pregunta: '¿En qué continente se encuentra Australia?',
       opciones: ['Europa', 'Asia', 'África', 'Oceanía'],
-      respuesta: 'Oceanía'
+      respuesta: ['Oceanía']
     },
     {
       pregunta: '¿Cuál es el río más largo del mundo?',
       opciones: ['Amazonas', 'Nilo', 'Mississippi', 'Yangtsé'],
-      respuesta: 'Amazonas'
+      respuesta: ['Amazonas']
     },
     {
       pregunta: '¿Cuál es el pecho frio mas grande?',
       opciones: ['Belgrano', 'Instituto', 'Talleres', 'Racing'],
-      respuesta: 'Talleres'
+      respuesta: ['Talleres']
     }
   ];
 
   preguntasAleatorias: Pregunta[] = [];
   preguntasSeleccionadas: Pregunta[] = [];
   preguntaActual = 0;
-  respuestaSeleccionada: string | null = null;
+  respuestasSeleccionadas: string[][] = [];
   mostrarRespuestaIncorrecta = false;
   mostrarSiguiente = false;
   mostrarPreguntas = true;
@@ -46,10 +46,10 @@ export class PreguntasComponent implements OnInit {
   mostrarGracias = false;
   mostrarPreguntaVolver = true;
 
-
   ngOnInit() {
     this.preguntasAleatorias = this.obtenerPreguntasAleatorias();
-    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 3); // Mostrar solo 2 preguntas
+    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 3);
+    this.respuestasSeleccionadas = new Array(this.preguntasSeleccionadas.length).fill([]);
   }
 
   obtenerPreguntasAleatorias(): Pregunta[] {
@@ -77,32 +77,56 @@ export class PreguntasComponent implements OnInit {
     return opcionesAleatorias;
   }
 
-  verificarRespuesta(pregunta: Pregunta): boolean {
-    return this.respuestaSeleccionada === pregunta.respuesta;
+  verificarRespuestas(pregunta: Pregunta): boolean {
+    const respuestasSeleccionadas = this.respuestasSeleccionadas[this.preguntaActual];
+    return pregunta.respuesta.every(respuesta => respuestasSeleccionadas.includes(respuesta));
   }
 
   siguientePregunta() {
     this.mostrarRespuestaIncorrecta = false;
-    this.respuestaSeleccionada = null;
     this.preguntaActual++;
 
-    if (this.preguntaActual < this.preguntasSeleccionadas.length) {
-      this.mostrarSiguiente = false;
-    } else {
+    if (this.preguntaActual >= this.preguntasSeleccionadas.length) {
       this.mostrarPreguntas = false;
       this.preguntasCompletadas = true;
     }
   }
 
+  seleccionarRespuesta(opcion: string) {
+    const respuestasSeleccionadas = [...this.respuestasSeleccionadas[this.preguntaActual]];
+
+    if (respuestasSeleccionadas.includes(opcion)) {
+      const index = respuestasSeleccionadas.indexOf(opcion);
+      respuestasSeleccionadas.splice(index, 1);
+    } else {
+      respuestasSeleccionadas.push(opcion);
+    }
+
+    this.respuestasSeleccionadas[this.preguntaActual] = respuestasSeleccionadas;
+    this.mostrarRespuestaIncorrecta = !this.verificarRespuestas(this.preguntasSeleccionadas[this.preguntaActual]);
+    this.mostrarSiguiente = !this.mostrarRespuestaIncorrecta;
+  }
+
   reiniciarPrueba() {
-    this.mostrarPreguntas = true;
-    this.preguntasCompletadas = false;
+    this.preguntasAleatorias = this.obtenerPreguntasAleatorias();
+    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 3);
     this.preguntaActual = 0;
-    this.respuestaSeleccionada = null;
+    this.respuestasSeleccionadas = new Array(this.preguntasSeleccionadas.length).fill([]);
     this.mostrarRespuestaIncorrecta = false;
     this.mostrarSiguiente = false;
-    this.preguntasAleatorias = this.obtenerPreguntasAleatorias();
-    this.preguntasSeleccionadas = this.preguntasAleatorias.slice(0, 3); // Mostrar solo 2 preguntas
+    this.mostrarPreguntas = true;
+    this.preguntasCompletadas = false;
     this.mostrarGracias = false;
+    this.mostrarPreguntaVolver = true;
+  }
+
+  volver() {
+    this.preguntaActual--;
+    this.mostrarSiguiente = true;
+    this.mostrarRespuestaIncorrecta = false;
+
+    if (this.preguntaActual === 0) {
+      this.mostrarPreguntaVolver = true;
+    }
   }
 }

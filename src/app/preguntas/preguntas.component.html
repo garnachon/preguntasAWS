@@ -1,31 +1,25 @@
 <div *ngIf="mostrarPreguntas">
-    <div *ngFor="let pregunta of preguntasSeleccionadas; let i = index">
-      <div *ngIf="preguntaActual === i">
-        <h3>Pregunta {{ i + 1 }}</h3>
-        <p>{{ pregunta.pregunta }}</p>
-        <ul>
-          <li *ngFor="let opcion of pregunta.opciones">
-            <label>
-              <input type="radio" name="pregunta{{ i }}" [value]="opcion" [(ngModel)]="respuestaSeleccionada">
-              {{ opcion }}
-            </label>
-          </li>
-        </ul>
-        <p *ngIf="!verificarRespuesta(pregunta) && respuestaSeleccionada !== null" class="aviso">Respuesta incorrecta. ¡Inténtalo de nuevo!</p>
-      </div>
-    </div>
-    <button (click)="siguientePregunta()" [disabled]="!verificarRespuesta(preguntasSeleccionadas[preguntaActual]) || respuestaSeleccionada === null">Siguiente</button>
+  <h2>Pregunta {{ preguntaActual + 1 }}</h2>
+  <p>{{ preguntasSeleccionadas[preguntaActual].pregunta }}</p>
+  <div *ngFor="let opcion of preguntasSeleccionadas[preguntaActual].opciones; let i = index">
+    <input type="checkbox" name="pregunta{{ i }}" [value]="opcion" [checked]="respuestasSeleccionadas[preguntaActual].includes(opcion)" (change)="seleccionarRespuesta(opcion)">
+    <label>{{ opcion }}</label>
   </div>
-  
-  <div *ngIf="!mostrarPreguntas || preguntasCompletadas">
-    <div *ngIf="!mostrarGracias">
-      <h3>¡Has terminado las preguntas!</h3>
-      <p>Gracias por participar.</p>
-      <p>¿Quieres volver a hacer el examen?</p>
-      <button (click)="reiniciarPrueba()">Sí</button>
-      <button (click)="mostrarGracias = true">No</button>
-    </div>
-    <div *ngIf="mostrarGracias" class="agradecimiento">
-      <p>Muchas gracias.</p>
-    </div>
+  <p *ngIf="mostrarRespuestaIncorrecta && respuestasSeleccionadas[preguntaActual].length > 0" class="aviso">Respuesta incorrecta. ¡Inténtalo de nuevo!</p>
+  <button (click)="siguientePregunta()" [disabled]="mostrarRespuestaIncorrecta || respuestasSeleccionadas[preguntaActual].length === 0">Siguiente</button>
+</div>
+
+
+
+<div *ngIf="!mostrarPreguntas || preguntasCompletadas">
+  <div *ngIf="!mostrarGracias">
+    <h3>¡Has terminado las preguntas!</h3>
+    <p>Gracias por participar.</p>
+    <p>¿Quieres volver a hacer el examen?</p>
+    <button (click)="reiniciarPrueba()">Sí</button>
+    <button (click)="mostrarGracias = true">No</button>
   </div>
+  <div *ngIf="mostrarGracias" class="agradecimiento">
+    <p>Muchas gracias.</p>
+  </div>
+</div>
